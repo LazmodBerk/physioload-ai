@@ -1,0 +1,41 @@
+project:
+  name: PhysioLoad AI
+  seed: 42
+  processed_version: v1
+
+data:
+  datasets: [fit3d, human36m]
+  static_pose_min_count: 3
+  split_unit: subject
+  train_fraction: 0.70
+  validation_fraction: 0.15
+  test_fraction: 0.15
+
+pose:
+  backends: [mediapipe, rtmpose]
+  common_schema: physioload_17
+  image_color_space: RGB
+
+biomechanics:
+  gravity_m_s2: 9.80665
+  allow_metric_outputs_without_scale: false
+  allow_external_moment_without_load_definition: false
+
+quality_gate:
+  # Bunlar yalnız başlangıç yapılandırmasıdır; validasyonla kalibre edilmelidir.
+  minimum_visibility: 0.70
+  minimum_pose_confidence: 0.70
+  maximum_view_deviation_deg: 20.0
+  maximum_geometry_penalty: 0.35
+  acceptance_threshold: 0.65
+
+marp:
+  candidate_actions:
+    - align_camera_to_measurement_plane
+    - increase_camera_distance
+    - improve_lighting
+    - clear_occlusion
+    - calibrate_metric_scale
+    - define_external_load
+    - retake_same_setup
+

@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# IDE / OS
+.idea/
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+
+# Source reports kept beside the code but not versioned in the software repo
+/*.docx
+/*.pdf
+/*.txt
+
+# Secrets and local identity
+.env
+.deploy_key
+.deploy_key.pub
+.github_token
+.physioload_user
+
+# Licensed/private datasets
+data/raw/**
+!data/raw/**/.gitkeep
+data/interim/**
+!data/interim/**/.gitkeep
+data/processed/**
+!data/processed/.gitkeep
+data/splits/**
+!data/splits/.gitkeep
+
+# Experiment artifacts
+models/checkpoints/**
+!models/checkpoints/.gitkeep
+models/calibrators/**
+!models/calibrators/.gitkeep
+outputs/**
+!outputs/**/.gitkeep
+
+# Runtime packages
+*.zip
+*.pt
+*.pth
+*.onnx
+*.pkl
+*.joblib
+

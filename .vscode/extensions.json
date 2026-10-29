@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "google.colab",
+    "ms-python.python",
+    "ms-toolsai.jupyter",
+    "ms-python.vscode-pylance"
+  ]
+}
+
