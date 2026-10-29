@@ -95,7 +95,7 @@ class MediaPipePoseEstimator:
 class RTMPoseEstimator:
     name = "rtmpose"
 
-    def __init__(self, *, mode: str = "balanced", backend: str = "onnxruntime") -> None:
+    def __init__(self, *, mode: str = "lightweight", backend: str = "onnxruntime") -> None:
         try:
             from rtmlib import Body
         except ImportError as error:

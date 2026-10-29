@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-pose = ["opencv-contrib-python>=4.9,<5", "mediapipe==0.10.21", "rtmlib>=0.0.13,<1", "onnxruntime>=1.18,<2"]
+pose = ["opencv-python==4.11.0.86", "opencv-contrib-python==4.11.0.86", "mediapipe==0.10.21", "rtmlib>=0.0.13,<1", "onnxruntime>=1.18,<2"]
 train = ["torch>=2.2,<3", "torchvision>=0.17,<1", "joblib>=1.3,<2"]
 dev = ["pytest>=8,<10", "ruff>=0.6,<1"]
 

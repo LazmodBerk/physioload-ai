@@ -1,0 +1,26 @@
+numpy>=1.26,<3
+pandas>=2.1,<3
+scipy>=1.11,<2
+scikit-learn>=1.4,<2
+opencv-python==4.11.0.86
+opencv-contrib-python==4.11.0.86
+pillow>=10,<13
+matplotlib>=3.8,<4
+seaborn>=0.13,<1
+pyyaml>=6,<7
+tqdm>=4.66,<5
+joblib>=1.3,<2
+jupyterlab>=4,<5
+ipykernel>=6,<8
+ipywidgets>=8,<9
+pytest>=8,<10
+
+# Poz kestirimi
+mediapipe==0.10.21
+rtmlib>=0.0.13,<1
+onnxruntime>=1.18,<2
+
+# Eğitim / GPU
+torch>=2.2,<3
+torchvision>=0.17,<1
+
