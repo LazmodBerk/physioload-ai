@@ -26,8 +26,12 @@
 
 ## Mimari
 
-- Görüntü işleme, poz kestirimi, geometri, Quality Gate, MARP ve raporlamayı
-  ayrı modüllerde tutun.
+- Görüntü işleme, poz kestirimi, biyomekanik hesap, hata yayılımı, fiziksel
+  geçerlilik, Ölçüm Bazlı Kalite Kapısı ve raporlamayı ayrı modüllerde tutun.
+- Fiziksel hesaplanabilirliği güvenilirlik puanından önce denetleyin; kararları
+  `ACCEPTED`, `REJECTED` ve `NOT_COMPUTABLE` olarak ayırın.
+- Ölçüm Duyarlılık Profili ve Hata Etki Haritasını gerçek bozunum sonuçlarından
+  üretin; açıklayıcı değerleri deney sonucu gibi sunmayın.
 - Bir ölçümün geçersizliği diğer bağımsız ölçümleri otomatik reddetmemelidir.
 - MediaPipe ve RTMPose sonuçlarını ortak isimli landmark şemasına açıkça
   dönüştürmeden doğrudan karşılaştırmayın.

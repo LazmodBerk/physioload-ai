@@ -32,6 +32,9 @@ Thumbs.db
 data/raw/**
 !data/raw/**/
 !data/raw/**/.gitkeep
+data/metadata/**
+!data/metadata/
+!data/metadata/.gitkeep
 data/interim/**
 !data/interim/**/
 !data/interim/**/.gitkeep

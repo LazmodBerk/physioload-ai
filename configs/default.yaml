@@ -27,15 +27,15 @@ quality_gate:
   minimum_pose_confidence: 0.70
   maximum_view_deviation_deg: 20.0
   maximum_geometry_penalty: 0.35
+  maximum_sensitivity_penalty: 0.50
   acceptance_threshold: 0.65
 
-marp:
-  candidate_actions:
-    - align_camera_to_measurement_plane
-    - increase_camera_distance
-    - improve_lighting
-    - clear_occlusion
-    - calibrate_metric_scale
-    - define_external_load
-    - retake_same_setup
+sensitivity:
+  # Deneysel başlangıç değerleri; veri çözünürlüğü ve validasyonla gerekçelendirilir.
+  perturbation_samples: 1000
+  impact_quantile: 0.95
+
+physical_validity:
+  metric_outputs_require_scale: true
+  external_moment_requires_complete_load: true
 

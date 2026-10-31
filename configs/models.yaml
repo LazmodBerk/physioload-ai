@@ -1,0 +1,62 @@
+# PhysioLoad AI — Poz Modeli Yapılandırması
+# Sayısal eşikler başlangıç mühendislik değerleridir; validasyon verisiyle kalibre edilmelidir.
+
+backends:
+  mediapipe:
+    name: "mediapipe"
+    display_name: "MediaPipe Pose (Heavy)"
+    model_variant: "pose_landmarker_heavy"
+    landmark_count: 33
+    confidence_field: "visibility"   # MediaPipe güven alanı
+    min_detection_confidence: 0.5
+    min_tracking_confidence: 0.5
+    coordinate_space: "image_pixels" # x,y piksel koordinatları
+    note: >
+      MediaPipe güven değerleri (visibility/presence) RTMPose skorlarıyla doğrudan
+      karşılaştırılmamalıdır. Gerektiğinde model bazında kalibrasyon uygulanır.
+
+  rtmpose:
+    name: "rtmpose"
+    display_name: "RTMPose (rtmlib)"
+    mode: "lightweight"              # lightweight | balanced | performance
+    backend: "onnxruntime"
+    device: "cpu"
+    landmark_count: 17               # COCO-17 iskelet
+    confidence_field: "score"
+    coordinate_space: "image_pixels"
+    note: >
+      RTMPose COCO-17 iskelet şeması MediaPipe-33'ten farklıdır. Karşılaştırma
+      için landmark_mapper aracılığıyla ortak physioload_17 şemasına dönüştürülür.
+
+# Ortak landmark şeması: physioload_17
+# MediaPipe-33 ve COCO-17 eşleştirmesi landmark_mapper.py tarafından yapılır.
+# Referanslar poz modelinin girdisi değildir.
+common_schema:
+  name: "physioload_17"
+  landmarks:
+    - nose
+    - left_shoulder
+    - right_shoulder
+    - left_elbow
+    - right_elbow
+    - left_wrist
+    - right_wrist
+    - left_hip
+    - right_hip
+    - left_knee
+    - right_knee
+    - left_ankle
+    - right_ankle
+    - left_heel
+    - right_heel
+    - left_foot_index
+    - right_foot_index
+
+experiment:
+  comparison_mode: "sequential"      # Her model aynı protokolle ayrı çalıştırılır
+  primary_backend: "mediapipe"       # Ön deney sonrası belirlenir; değiştirilebilir
+  image_color_space: "RGB"
+  note: >
+    İki model sisteme her zaman birlikte entegre edilmez. Deney aşamasında aynı
+    görüntüler üzerinde karşılaştırılır; ardından ana poz kestirimi modeli seçilir.
+

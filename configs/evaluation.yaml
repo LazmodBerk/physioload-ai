@@ -1,0 +1,94 @@
+# PhysioLoad AI — A0-A4 Değerlendirme ve Deney Protokolü Yapılandırması
+# Sayısal eşikler başlangıç mühendislik değerleridir; validasyon verisiyle kalibre edilmelidir.
+
+experiment:
+  seed: 42
+  severe_error_threshold_deg: 10.0
+  # Ağır hata tanımı: |referans - tahmin| > severe_error_threshold_deg
+  # Bu eşik literatür ve validasyon dağılımıyla gerekçelendirilmelidir.
+  note: >
+    Ağır hata eşiği çalışma başlamadan protokolde belirtilir; test verisi
+    görüldükten sonra değiştirilemez.
+
+ablations:
+  A0:
+    name: "Doğrudan poz ve ölçüm"
+    description: >
+      Temel hat: poz modelinden gelen landmark koordinatları doğrudan biyomekanik
+      hesaba aktarılır. Güven filtresi veya geçerlilik denetimi uygulanmaz.
+    filters: []
+
+  A1:
+    name: "Zamansal süzme (koşullu)"
+    description: >
+      Ardışık kayıt mevcutsa landmark koordinatlarına zaman alanında medyan veya
+      Savitzky-Golay filtresi uygulanır. Tek kare veri grubunda atlanır.
+    filters: ["temporal_smoothing"]
+    window_size: 5
+    method: "median"               # median | savitzky_golay
+
+  A2:
+    name: "Geometrik tutarlılık"
+    description: >
+      Anatomik uzunluk oranı ve simetri tutarsızlıkları tespit edildiğinde
+      ilgili ölçümler reddedilir. Geçerlilik kararı kural tabanlıdır.
+    filters: ["geometric_consistency"]
+    length_ratio_tolerance: 0.30   # Beklenen segment uzunluğundan maksimum sapma oranı
+
+  A3:
+    name: "Birleşik güvenilirlik puanı"
+    description: >
+      Görünürlük, model güveni, bakış açısı ve geometri özelliklerini birleştiren
+      ağırlıklı puan. Duyarlılık penaltısı dahil edilmez.
+    filters: ["reliability_score"]
+    use_sensitivity_penalty: false
+
+  A4:
+    name: "Ölçüm Bazlı Kalite Kapısı (tam)"
+    description: >
+      Fiziksel geçerlilik ön denetimi + ölçüm bazlı hata duyarlılığı + birleşik
+      güvenilirlik puanı. Mimarinin özgün çekirdeği.
+    filters: ["physical_validity", "sensitivity_penalty", "reliability_score"]
+    use_sensitivity_penalty: true
+
+metrics:
+  landmark_position:
+    - mae_px           # Ortalama mutlak piksel hatası
+    - rmse_px          # Kareköklü ortalama kare hatası
+    - pck_threshold_px: 10  # PCK eşiği (piksel)
+
+  joint_angle:
+    - mae_deg          # Derece cinsinden MAE
+    - rmse_deg         # Derece cinsinden RMSE
+
+  severe_error_detection:
+    - auroc            # Ağır hata ayrımı için AUROC
+    - auprc            # Ağır hata ayrımı için AUPRC
+
+  selective_prediction:
+    - accepted_fraction      # Kabul edilen ölçüm oranı
+    - accepted_mae_deg       # Kabul edilenlerin açı hatası
+    - aurc                   # Alan altında risk-kapsama eğrisi
+
+  explainability:
+    - correct_status_rate    # Doğru ACCEPTED/REJECTED/NOT_COMPUTABLE oranı
+    - correct_reason_rate    # Doğru gerekçe kodu oranı
+
+splits:
+  unit: "subject"           # Aynı kişi farklı bölümlere geçemez
+  train_fraction: 0.70
+  validation_fraction: 0.15
+  test_fraction: 0.15
+  note: >
+    Aynı kişinin farklı kamera veya denemeleri aynı bölümde kalır.
+    Kalite Kapısı eşikleri yalnızca validation bölümünde seçilir.
+    Test bölümü nihai değerlendirmeye ayrılır; eşik seçimi için kullanılmaz.
+
+reference_data:
+  role: "evaluation_only"
+  note: >
+    Referans 3B eklem verileri poz modelinin tahmin girdisi değildir.
+    Yalnızca hata hesabı ve A0-A4 karşılaştırmasında kullanılır.
+    3B referans açıları ilgili kamera düzlemine izdüşürülerek 2B referans
+    oluşturulur; 3B ve 2B açılar doğrudan karşılaştırılmaz.
+

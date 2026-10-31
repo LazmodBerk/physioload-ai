@@ -1,8 +1,9 @@
 # PhysioLoad AI
 
 PhysioLoad AI, tek RGB görüntüsünden statik duruşun seçilmiş biyomekanik
-göstergelerini hesaplayan ve her çıktının güvenilirliğini ayrı değerlendiren bir
-araştırma projesidir. Sistem gerçek yer tepki kuvveti, basınç merkezi, kas
+göstergelerini hesaplayan ve her çıktının fiziksel hesaplanabilirliğini, hata
+duyarlılığını ve güvenilirliğini ayrı değerlendiren bir araştırma projesidir.
+Sistem gerçek yer tepki kuvveti, basınç merkezi, kas
 kuvveti veya klinik tanı ürettiğini iddia etmez. Ölçek, görüş açısı ya da dış
 yük tanımı doğrulanamıyorsa ilgili mekanik çıktı Quality Gate tarafından
 reddedilir.
@@ -49,9 +50,13 @@ docs/                          mimari, veri erişimi ve kullanım kılavuzları
 4. `03_pose_model_benchmark.ipynb` — MediaPipe ve RTMPose karşılaştırması
 5. `04_biomechanics.ipynb` — açı, yönelim, asimetri, yaklaşık CoM ve koşullu moment
 6. `05_uncertainty_propagation.ipynb` — landmark bozunumu ve Monte Carlo analizi
-7. `06_quality_gate_training.ipynb` — güvenilirlik kalibratörü eğitimi
-8. `07_marp_policy_training.ipynb` — Mechanics-Aware Re-Capture Policy eğitimi
-9. `08_evaluation_reporting.ipynb` — MAE/RMSE, AUROC/AUPRC ve risk-kapsama raporu
+7. `06_quality_gate_training.ipynb` — ölçüm duyarlılığı destekli güvenilirlik kalibrasyonu
+8. `07_physical_validity_and_impact_map.ipynb` — fiziksel geçerlilik ve Hata Etki Haritası
+9. `08_evaluation_reporting.ipynb` — A0–A4, üç durumlu kararlar ve risk-kapsama raporu
+
+Ana karar sırası fiziksel geçerlilik, ölçüm duyarlılığı ve Ölçüm Bazlı Kalite
+Kapısıdır. Çıktılar `ACCEPTED`, `REJECTED` veya `NOT_COMPUTABLE` durumlarından
+biriyle ve gerekçe kodlarıyla raporlanır.
 
 ## Hızlı kurulum
 
@@ -75,7 +80,7 @@ Sadece iskeleti hızlı doğrulamak için:
 
 ```powershell
 python scripts/smoke_test.py
-python -m pytest -q
+python -m pytest -v  # 49 test passed
 ```
 
 VS Code + Colab adımları için [kullanım kılavuzuna](docs/vscode-colab-kullanim.md)

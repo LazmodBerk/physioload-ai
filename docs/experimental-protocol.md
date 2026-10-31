@@ -2,30 +2,48 @@
 
 ## Ana araştırma sorusu
 
-Tek kamera landmark hatası eklem açısı, moment kolu ve koşullu dış moment
-hesabına nasıl yayılır; sistem hangi koşullarda sayısal çıktıyı reddetmelidir?
+Tek RGB görüntüsünde landmark konum hatalarının farklı statik biyomekanik
+ölçümlere etkisi, ölçüm bazlı seçici güvenilirlik kararlarını iyileştirebilir mi?
 
-## Birincil değerlendirme
+## Deney sırası
 
-- Landmark: PCK ve konum hatası
+1. Fit3D ve Human3.6M erişim, lisans, kamera ve referans uygunluğunu doğrula.
+2. MediaPipe ile RTMPose modellerini aynı görüntüler ve ortak landmark şemasıyla
+   karşılaştır.
+3. Referans 3B noktaları ilgili kamera düzlemine izdüşürerek eşdeğer 2B
+   referans ölçümler oluştur.
+4. Seçilen landmarklara gerekçelendirilmiş büyüklük ve yönlerde kontrollü
+   bozunum uygula.
+5. Her ölçüm için Ölçüm Duyarlılık Profili ve Hata Etki Haritası üret.
+6. Fiziksel geçerlilik ön denetimini uygula.
+7. A0–A4 aşamalarını aynı veri ayrımlarında değerlendir.
+
+## Birincil ölçütler
+
+- Landmark konumu: karşılaştırılabilir koordinatlarda konum hatası ve PCK
 - Eklem açısı: derece cinsinden MAE ve RMSE
 - Ağır hata ayrımı: AUROC ve AUPRC
-- Seçici tahmin: kabul oranı, kabul edilen örneklerde hata ve AURC
-- MARP: yeniden çekim sonrası hata azalması, başarılı düzeltme oranı ve tekrar sayısı
+- Seçici tahmin: kabul oranı, kabul edilen ölçümlerin hatası ve AURC
+- Açıklanabilirlik: doğru durum ve gerekçe kodu oranı
+- Hata Etki Haritası: en etkili landmark sıralamasının bozunum deneyleriyle
+  tutarlılığı
 
-## Veri ayrımı
+## Veri ayrımı ve eşik seçimi
 
-Kişi bazında train, validation ve test ayrımı kullanılır. Aynı kişinin farklı
-kamera veya denemeleri farklı bölümlere geçemez. Eşikler yalnız validation
-bölümünde belirlenir; test bölümü tek seferlik nihai değerlendirmeye ayrılır.
+Kişi ve deneme bazında train, validation ve test ayrımı kullanılır. Aynı kişinin
+farklı kamera veya denemeleri farklı bölümlere geçemez. Kalite Kapısı eşikleri
+yalnız validation bölümünde seçilir. Test bölümü nihai değerlendirmeye ayrılır.
 
-## Baseline karşılaştırmaları
+## A0–A4 karşılaştırmaları
 
-1. Standart kamera talimatı
-2. Yalnız poz güveni düşükse genel yeniden çekim
-3. Birleşik Quality Gate
-4. Mekanik hata nedenine göre MARP eylemi
+1. A0 doğrudan poz ve ölçüm
+2. A1 uygun ardışık kayıtta zamansal süzme
+3. A2 geometrik tutarlılık
+4. A3 birleşik güvenilirlik puanı
+5. A4 fiziksel geçerlilik ve ölçüm duyarlılığı kullanan Kalite Kapısı
 
-Sayısal eşikler önceden doğrulanmış standart gibi sunulmaz. Literatür,
-validasyon dağılımı ve danışman kararıyla gerekçelendirilir.
+Yalnız model güvenini kullanan temel yöntem ayrıca raporlanır. Gerçek deney
+sonuçları oluşmadan yeni mimarinin daha iyi olduğu varsayılmaz. Sayısal eşikler
+literatür, veri uygunluğu, validasyon dağılımı ve danışman kararıyla
+gerekçelendirilir.
 

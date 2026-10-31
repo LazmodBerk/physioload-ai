@@ -30,11 +30,17 @@ def risk_coverage(errors, reliability_scores) -> dict[str, np.ndarray | float]:
     scores = np.asarray(reliability_scores, float)
     if errors.shape != scores.shape or errors.ndim != 1:
         raise ValueError("errors and scores must be same-length vectors")
+    if len(errors) == 0:
+        return {"coverage": np.array([]), "risk": np.array([]), "aurc": 0.0}
     order = np.argsort(scores)[::-1]
     sorted_errors = errors[order]
     cumulative_risk = np.cumsum(sorted_errors) / np.arange(1, len(errors) + 1)
     coverage = np.arange(1, len(errors) + 1) / len(errors)
-    aurc = float(np.trapz(cumulative_risk, coverage))
+    if len(coverage) < 2:
+        aurc = float(cumulative_risk[0])
+    else:
+        integrate = getattr(np, "trapezoid", getattr(np, "trapz", None))
+        aurc = float(integrate(cumulative_risk, coverage))
     return {"coverage": coverage, "risk": cumulative_risk, "aurc": aurc}
 
 
